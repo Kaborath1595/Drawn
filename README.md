@@ -171,3 +171,34 @@ eas build -p android --profile preview
 - httpOnly cookies en web (tradeoff actual: necesario para el Service Worker)
 - Tests unitarios en drawn-web (Vitest)
 - Deploy en producción (Railway/Render + MongoDB Atlas)
+
+
+## Imagenes
+<img width="486" height="1032" alt="image" src="https://github.com/user-attachments/assets/f51af226-8b21-4096-815a-6e5e668e6a7a" />
+
+<img width="487" height="1051" alt="image" src="https://github.com/user-attachments/assets/eb64c71e-98ed-4775-897e-1c9c3a48d784" />
+
+
+## Consideraciones:
+
+Mongo:
+
+1) Inicialmente pensé en hacer que el endpoint actualziara un contador a nivel de usuario, sin embargo esa alternativa era mala idea por temas de responsabilidad. No tenia sentido que el cotnador estuviese dentro del usuario y se actualizara el documento.
+2) Tome un approach mas agresivo y consideré centralizarlo a nivel de una sola coleccion por dia y que todos los usuarios tocaran ese documento, sin embargo ahi me acordé de que mongo acepta un maximo de 16mb por documento. Si todos llenasen uno solo y además se le pega en grandes cantidades al endpoint podría colapsar y perder mas datos.
+3) Posteriormente, me parecio que la mejor idea era tener una coleccion de clicks donde guardara todos los clicks de cada usuario. Iba a hacerlo de forma infinita, pero lo descarté porque es un antipatron en mongo crear arrays infinitamente crecientes. https://www.mongodb.com/es/docs/atlas/schema-suggestions/avoid-unbounded-arrays/
+4) Finalmente decanté por un bucket diario que se crea la primera vez que el usuario clickea el botón. Ese bucket esta creado al inicio del dia con un calculo de UTC offset para evitar problemas cuando se quisiera buscar desde un from a un to.
+
+App: 
+
+1) A medida que iba desarrollando me di cuenta que habian casos que obvie al momento de proponer la solucion. Primero, desconocía que existia una necesidad de inscripciones/sub para poder publicar una app. En el caso de android es free, pero no así para Iphone que cuesta 100usd para poder subir la app.
+2) Ya que no tenía claro si es que se podia extender el alcance de tal forma que se consideraba que podiamos gastar los 100 usd extras, decanté por crear una PWA para que al menos el MVP pudiese funcionar en ambos dispositios.
+3) Dentro de lo mismo, me di cuenta que el concepto de Service Worker es exclusivo de las aplicaciones que usan browser por lo que me enfrenté en buscarle una vuelta a algo similar en la aplicación hecha con React Native. Esto lo resolvi con NetInfo, el cual escucha los cambios de conectividad del dispositivo. Eso permite que, al momento de no tener net, se encolan los clicks y despues cuando esta disponibles los inserta.
+4) Dicho todo esto, cree ambas posibilidades. Si pagar una cuenta de 100 usd es posible, podemos usar el codigo de react native el cual puede ser mas robusto en terminos de los componentes del dispositivos o, si no hace falta, podemos utilizar la PWA.
+
+API : 
+
+1) Inicialmente implemnté una arquitectura hexagonal, pero me parecio un overkill para el caso.
+2) Dado que no teniamos una necesidad de algo tan robusto use la arquitectura que conozco que es la MVC por capas, la cual es suficiente para satisfacer el alcance.
+3) Implemente seguridad de token y guards basicos, además de los roles que protegen en caso de que alguien quisiese golpear un endpoint que no es permitido por el rol.
+
+
