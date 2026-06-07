@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "drawn-api"
+		},
+		{
+			"path": "drawn-app"
+		},
+		{
+			"path": "drawn-web"
+		}
+	],
+	"settings": {}
+}
