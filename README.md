@@ -1,6 +1,6 @@
 # Drawn — MindShift
 
-Sistema de registro de ansiedad para la plataforma MindShift. Pacientes presionan un botón para registrar episodios de ansiedad. Especialistas acceden a totales y rankings por rango de fechas.
+Sistema de registro de ansiedad Mindshift. Pacientes presionan un botón para registrar episodios de ansiedad. Especialistas podrán acceder eventualmente a totales y rankings por rango de fechas.
 
 ---
 
