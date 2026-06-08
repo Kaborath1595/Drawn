@@ -36,10 +36,27 @@ Drawn/
 
 ## Arquitectura
 
-```
-[drawn-web PWA]  ──┐
-                   ├──► drawn-api (NestJS) ──► MongoDB
-[drawn-app RN]  ───┘
+```mermaid
+flowchart LR
+    P(["👤 Paciente"])
+    E(["👨‍⚕️ Especialista"])
+
+    subgraph Frontend
+        APP["App\n(Web / Mobile)"]
+        QUEUE["Cola offline\n(SW / NetInfo)"]
+    end
+
+    subgraph Backend
+        API["drawn-api\n(NestJS)"]
+        DB[("MongoDB")]
+    end
+
+    P -->|"presiona botón"| APP
+    E -->|"ve dashboard"| APP
+    APP -->|"POST /clicks\nGET /summary\nGET /ranking"| API
+    API --> DB
+    APP -.->|"sin señal"| QUEUE
+    QUEUE -.->|"al reconectar"| API
 ```
 
 **drawn-api** usa arquitectura MVC modular plana:
