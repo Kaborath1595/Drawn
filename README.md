@@ -29,6 +29,11 @@ Drawn/
 
 ---
 
+## Diagrama
+
+<img width="731" height="761" alt="MindShift drawio" src="https://github.com/user-attachments/assets/c742e311-7a4b-4593-982f-7340555231b9" />
+
+
 ## Arquitectura
 
 ```
